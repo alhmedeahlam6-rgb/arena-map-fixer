@@ -318,7 +318,8 @@ export default function LoneWolfArena() {
   }, [prone]);
 
   useEffect(() => {
-    setTouchUi(window.matchMedia("(pointer: coarse)").matches);
+    // The HUD is designed as a mobile-style touch layout, so it is always shown.
+    setTouchUi(true);
   }, []);
 
 
