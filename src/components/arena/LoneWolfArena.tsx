@@ -2511,20 +2511,41 @@ export default function LoneWolfArena() {
 
       {/* scoreboard */}
       {hud.length > 0 && (
-        <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 sm:top-6">
-          <div className="flex items-stretch overflow-hidden rounded-lg shadow-[0_0_18px_-6px_rgba(0,0,0,0.9)]">
-            <div className="flex min-w-14 items-center justify-center bg-[#1b62d6] px-4 py-1.5 text-xl font-extrabold tabular-nums text-white">
+        <div className="pointer-events-none absolute left-1/2 top-2 z-10 -translate-x-1/2 sm:top-3">
+          <div className="flex items-stretch overflow-hidden rounded-[3px] shadow-[0_0_18px_-6px_rgba(0,0,0,0.95)]">
+            <div
+              className="flex min-w-12 items-center justify-center bg-gradient-to-b from-[#2f7dfd] to-[#1147a8] px-3 py-0.5 text-base font-extrabold tabular-nums text-white"
+              style={{ clipPath: "polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%)" }}
+            >
               {score.blue}
             </div>
-            <div className="flex flex-col items-center justify-center bg-black/70 px-4 py-1 text-center backdrop-blur">
-              <span className="text-[9px] uppercase tracking-[0.3em] text-white/70">Round {match.round}</span>
-              <span className="text-[9px] uppercase tracking-widest text-white/50">
-                {hud.filter((f) => f.team === "blue" && f.alive).length} v {hud.filter((f) => f.team === "red" && f.alive).length}
+            <div className="flex flex-col items-center justify-center bg-black/80 px-4 py-0.5 text-center backdrop-blur">
+              <span className="text-[11px] font-bold tabular-nums leading-tight text-[#ffd45e]">
+                {String(Math.floor(match.countdown / 60)).padStart(2, "0")}:
+                {String(match.countdown % 60).padStart(2, "0")}
+              </span>
+              <span className="text-[7px] uppercase tracking-[0.25em] text-white/55">
+                R{match.round} · {hud.filter((f) => f.team === "blue" && f.alive).length}v
+                {hud.filter((f) => f.team === "red" && f.alive).length}
               </span>
             </div>
-            <div className="flex min-w-14 items-center justify-center bg-[#d62828] px-4 py-1.5 text-xl font-extrabold tabular-nums text-white">
+            <div
+              className="flex min-w-12 items-center justify-center bg-gradient-to-b from-[#ff8a3d] to-[#c93a10] px-3 py-0.5 text-base font-extrabold tabular-nums text-white"
+              style={{ clipPath: "polygon(8px 0, 100% 0, 100% 100%, 0 100%)" }}
+            >
               {score.red}
             </div>
+          </div>
+
+          {/* objective / progress ribbon under the score, as in the reference HUD */}
+          <div className="relative mx-auto mt-1.5 h-4 w-[280px] overflow-hidden rounded-[2px] border border-[#e0b64a]/60 bg-black/70 sm:w-[340px]">
+            <div
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#8c6a12] via-[#e9c34f] to-[#8c6a12] transition-all duration-300"
+              style={{ width: `${Math.min(100, (score.blue / Math.max(1, ROUNDS_TO_WIN)) * 100)}%` }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold uppercase tracking-[0.3em] text-white/90 drop-shadow">
+              Victory
+            </span>
           </div>
         </div>
       )}
