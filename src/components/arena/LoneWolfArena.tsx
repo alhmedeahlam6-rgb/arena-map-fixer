@@ -2276,23 +2276,22 @@ export default function LoneWolfArena() {
             <div className="absolute left-1/2 top-1/2 h-1.5 w-6 -translate-x-1/2 translate-y-[27.5vh] rounded-sm bg-black/60" />
           </div>
 
-          {/* Free Fire style health bar */}
-          <div className="pointer-events-none absolute bottom-6 left-1/2 z-10 w-64 -translate-x-1/2 sm:w-80">
+          {/* thin bottom-centre vitals strip */}
+          <div className="pointer-events-none absolute bottom-3 left-1/2 z-10 w-[320px] -translate-x-1/2 sm:w-[380px]">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/80">HP</span>
-              <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-black/60 ring-1 ring-white/25">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-white/70">
+                HP {playerHp}/{MAX_HP}
+              </span>
+              <div className="h-1.5 flex-1 overflow-hidden rounded-sm bg-black/70 ring-1 ring-white/20">
                 <div
-                  className="h-full rounded-full bg-white transition-all duration-150"
+                  className="h-full bg-white transition-all duration-150"
                   style={{ width: `${Math.max(0, Math.min(100, (playerHp / MAX_HP) * 100))}%` }}
                 />
               </div>
-              <span className="w-16 text-right text-xs font-bold tabular-nums text-white">
-                {playerHp}/{MAX_HP}
+              <span className="text-[9px] uppercase tracking-widest text-white/45 tabular-nums">
+                {playerStatsHud.kills}K/{playerStatsHud.deaths}D
               </span>
             </div>
-            <p className="mt-1 text-center text-[10px] uppercase tracking-widest text-white/50">
-              {playerStatsHud.kills} K / {playerStatsHud.deaths} D
-            </p>
           </div>
 
           <div
@@ -2381,9 +2380,9 @@ export default function LoneWolfArena() {
             const empty = hasAmmo && mag === 0;
             const low = hasAmmo && mag > 0 && mag <= Math.max(1, Math.ceil(magSize * 0.25));
             return (
-              <div className={`pointer-events-none absolute right-4 flex flex-col items-end gap-1 sm:right-6 ${touchUi ? "bottom-[230px]" : "bottom-24 sm:bottom-28"}`}>
+              <div className="pointer-events-none absolute bottom-[186px] right-5 flex flex-col items-end gap-1">
                 <div
-                  className={`flex items-baseline gap-3 rounded-md border px-4 py-2 backdrop-blur transition-colors ${
+                  className={`flex items-baseline gap-2 rounded-md border px-3 py-1 backdrop-blur transition-colors ${
                     empty
                       ? "border-destructive bg-destructive/15"
                       : low
@@ -2392,37 +2391,27 @@ export default function LoneWolfArena() {
                   }`}
                 >
                   <span
-                    className={`text-3xl font-bold tabular-nums ${
+                    className={`text-xl font-bold tabular-nums ${
                       empty ? "text-destructive animate-pulse" : low ? "text-[var(--hud-accent)]" : "text-foreground"
                     }`}
                   >
                     {mag}
                   </span>
-                  <span className="text-sm font-medium text-muted-foreground">/ {reserve}</span>
+                  <span className="text-xs font-medium text-muted-foreground">/ {reserve}</span>
                 </div>
                 {empty && !isReloading && (
-                  <div className="animate-pulse rounded-md bg-destructive px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-destructive-foreground">
-                    Press R to reload
+                  <div className="animate-pulse rounded-md bg-destructive px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-destructive-foreground">
+                    Reload
                   </div>
                 )}
                 {isReloading && (
-                  <div className="rounded-md bg-[var(--hud-accent)]/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--hud-accent-foreground)]">
+                  <div className="rounded-md bg-[var(--hud-accent)]/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[var(--hud-accent-foreground)]">
                     Reloading… {reloadLeft.toFixed(1)}s
                   </div>
                 )}
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                  {w?.name ?? "Deagle"} · R to reload
+                <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                  {w?.name ?? "Deagle"}
                 </p>
-                {w ? (
-                  <img
-                    src={w.image}
-                    alt={w.name}
-                    width={512}
-                    height={512}
-                    className={`mt-1 h-20 w-auto object-contain opacity-90 transition-transform duration-100 sm:h-28 ${isReloading ? "translate-x-2 -translate-y-2 -rotate-6" : ""}`}
-                    loading="lazy"
-                  />
-                ) : null}
               </div>
             );
           })()}
