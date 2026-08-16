@@ -2567,11 +2567,9 @@ export default function LoneWolfArena() {
         </div>
       )}
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-3 p-4 sm:p-6">
-        <div />
-
-        <div className="pointer-events-auto flex flex-col items-end gap-2">
-          <div className="flex gap-2">
+      <div className="pointer-events-none absolute left-3 top-1/2 z-20 -translate-y-1/2">
+        <div className="pointer-events-auto flex flex-col items-start gap-2">
+          <div className="flex flex-col gap-2">
             <button
               onClick={() => {
                 const next = !isSfxMuted();
