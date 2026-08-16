@@ -2347,10 +2347,10 @@ export default function LoneWolfArena() {
           )}
 
           {!shopOpen && (
-            <WeaponSlots slots={slots} activeSlot={activeSlot} onSelect={selectSlot} />
+            <WeaponSlots slots={slots} activeSlot={activeSlot} onSelect={selectSlot} ammo={ammo} />
           )}
 
-          {touchUi && !shopOpen && !paused && (
+          {!shopOpen && !paused && (
             <TouchControls
               press={(code) => keysRef.current.add(code)}
               release={(code) => keysRef.current.delete(code)}
