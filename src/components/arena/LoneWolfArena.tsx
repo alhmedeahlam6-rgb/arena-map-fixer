@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
-import { Skull, Volume2, VolumeX, Maximize, Minimize } from "lucide-react";
+import { Skull, Volume2, VolumeX, Maximize, Minimize, Settings, PawPrint, Wifi, Eye, Smile } from "lucide-react";
 import { createSpawnFx, type SpawnFx } from "./spawnFx";
 import { createImpactFx, type ImpactFx } from "./impactFx";
 import { saveMatchResult, getLeaderboard } from "@/lib/arena.functions";
@@ -2214,7 +2214,7 @@ export default function LoneWolfArena() {
             <PawPrint className="h-4 w-4" />
             <span className="flex items-center gap-1 text-[9px] font-semibold tabular-nums">
               <Wifi className="h-4 w-4" />
-              {ping}
+              92
             </span>
             <span className="flex items-center gap-1 text-[9px] font-semibold tabular-nums">
               <Eye className="h-4 w-4" />
