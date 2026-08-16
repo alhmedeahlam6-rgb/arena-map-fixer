@@ -2208,6 +2208,23 @@ export default function LoneWolfArena() {
           )}
           <Minimap radarRef={radarRef} mapRef={mapGridRef} imageRef={mapImageRef} />
 
+          {/* status strip right of the minimap: settings, companion, ping, spectators */}
+          <div className="pointer-events-none absolute left-[148px] top-3 z-10 flex items-center gap-3 text-white/70 sm:left-[156px] sm:top-4">
+            <Settings className="h-4 w-4" />
+            <PawPrint className="h-4 w-4" />
+            <span className="flex items-center gap-1 text-[9px] font-semibold tabular-nums">
+              <Wifi className="h-4 w-4" />
+              {ping}
+            </span>
+            <span className="flex items-center gap-1 text-[9px] font-semibold tabular-nums">
+              <Eye className="h-4 w-4" />
+              {hud.filter((f) => f.team === "blue" && f.alive).length}
+            </span>
+          </div>
+          <div className="pointer-events-none absolute left-[152px] top-9 z-10 text-white/60 sm:left-[160px] sm:top-10">
+            <Smile className="h-4 w-4" />
+          </div>
+
           {/* Floating damage numbers at the hit point */}
           <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
             {damagePopups.map((d) => (
