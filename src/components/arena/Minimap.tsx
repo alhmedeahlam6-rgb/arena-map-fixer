@@ -182,12 +182,12 @@ export default function Minimap({ radarRef, mapRef, imageRef }: Props) {
   }, [radarRef, mapRef, imageRef]);
 
   return (
-    <div className="pointer-events-none absolute left-4 top-4 z-10 sm:left-6 sm:top-6">
+    <div className="pointer-events-none absolute left-3 top-3 z-10 sm:left-4 sm:top-4">
       <canvas
         ref={canvasRef}
         width={140}
         height={140}
-        className="rounded-lg shadow-[0_0_24px_-6px_rgba(0,0,0,0.8)]"
+        className="h-[104px] w-[132px] rounded-md border-2 border-white/70 object-cover shadow-[0_0_24px_-6px_rgba(0,0,0,0.9)]"
       />
     </div>
   );

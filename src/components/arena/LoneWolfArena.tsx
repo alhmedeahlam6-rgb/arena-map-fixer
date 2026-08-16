@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
-import { Skull, Volume2, VolumeX, Maximize, Minimize } from "lucide-react";
+import { Skull, Volume2, VolumeX, Maximize, Minimize, Settings, PawPrint, Wifi, Eye, Smile } from "lucide-react";
 import { createSpawnFx, type SpawnFx } from "./spawnFx";
 import { createImpactFx, type ImpactFx } from "./impactFx";
 import { saveMatchResult, getLeaderboard } from "@/lib/arena.functions";
@@ -318,7 +318,8 @@ export default function LoneWolfArena() {
   }, [prone]);
 
   useEffect(() => {
-    setTouchUi(window.matchMedia("(pointer: coarse)").matches);
+    // The HUD is designed as a mobile-style touch layout, so it is always shown.
+    setTouchUi(true);
   }, []);
 
 
@@ -2207,6 +2208,23 @@ export default function LoneWolfArena() {
           )}
           <Minimap radarRef={radarRef} mapRef={mapGridRef} imageRef={mapImageRef} />
 
+          {/* status strip right of the minimap: settings, companion, ping, spectators */}
+          <div className="pointer-events-none absolute left-[148px] top-3 z-10 flex items-center gap-3 text-white/70 sm:left-[156px] sm:top-4">
+            <Settings className="h-4 w-4" />
+            <PawPrint className="h-4 w-4" />
+            <span className="flex items-center gap-1 text-[9px] font-semibold tabular-nums">
+              <Wifi className="h-4 w-4" />
+              92
+            </span>
+            <span className="flex items-center gap-1 text-[9px] font-semibold tabular-nums">
+              <Eye className="h-4 w-4" />
+              {hud.filter((f) => f.team === "blue" && f.alive).length}
+            </span>
+          </div>
+          <div className="pointer-events-none absolute left-[152px] top-9 z-10 text-white/60 sm:left-[160px] sm:top-10">
+            <Smile className="h-4 w-4" />
+          </div>
+
           {/* Floating damage numbers at the hit point */}
           <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
             {damagePopups.map((d) => (
@@ -2275,23 +2293,22 @@ export default function LoneWolfArena() {
             <div className="absolute left-1/2 top-1/2 h-1.5 w-6 -translate-x-1/2 translate-y-[27.5vh] rounded-sm bg-black/60" />
           </div>
 
-          {/* Free Fire style health bar */}
-          <div className="pointer-events-none absolute bottom-6 left-1/2 z-10 w-64 -translate-x-1/2 sm:w-80">
+          {/* thin bottom-centre vitals strip */}
+          <div className="pointer-events-none absolute bottom-3 left-1/2 z-10 w-[320px] -translate-x-1/2 sm:w-[380px]">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/80">HP</span>
-              <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-black/60 ring-1 ring-white/25">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-white/70">
+                HP {playerHp}/{MAX_HP}
+              </span>
+              <div className="h-1.5 flex-1 overflow-hidden rounded-sm bg-black/70 ring-1 ring-white/20">
                 <div
-                  className="h-full rounded-full bg-white transition-all duration-150"
+                  className="h-full bg-white transition-all duration-150"
                   style={{ width: `${Math.max(0, Math.min(100, (playerHp / MAX_HP) * 100))}%` }}
                 />
               </div>
-              <span className="w-16 text-right text-xs font-bold tabular-nums text-white">
-                {playerHp}/{MAX_HP}
+              <span className="text-[9px] uppercase tracking-widest text-white/45 tabular-nums">
+                {playerStatsHud.kills}K/{playerStatsHud.deaths}D
               </span>
             </div>
-            <p className="mt-1 text-center text-[10px] uppercase tracking-widest text-white/50">
-              {playerStatsHud.kills} K / {playerStatsHud.deaths} D
-            </p>
           </div>
 
           <div
@@ -2346,10 +2363,10 @@ export default function LoneWolfArena() {
           )}
 
           {!shopOpen && (
-            <WeaponSlots slots={slots} activeSlot={activeSlot} onSelect={selectSlot} />
+            <WeaponSlots slots={slots} activeSlot={activeSlot} onSelect={selectSlot} ammo={ammo} />
           )}
 
-          {touchUi && !shopOpen && !paused && (
+          {!shopOpen && !paused && (
             <TouchControls
               press={(code) => keysRef.current.add(code)}
               release={(code) => keysRef.current.delete(code)}
@@ -2380,9 +2397,9 @@ export default function LoneWolfArena() {
             const empty = hasAmmo && mag === 0;
             const low = hasAmmo && mag > 0 && mag <= Math.max(1, Math.ceil(magSize * 0.25));
             return (
-              <div className={`pointer-events-none absolute right-4 flex flex-col items-end gap-1 sm:right-6 ${touchUi ? "bottom-[230px]" : "bottom-24 sm:bottom-28"}`}>
+              <div className="pointer-events-none absolute bottom-[186px] right-5 flex flex-col items-end gap-1">
                 <div
-                  className={`flex items-baseline gap-3 rounded-md border px-4 py-2 backdrop-blur transition-colors ${
+                  className={`flex items-baseline gap-2 rounded-md border px-3 py-1 backdrop-blur transition-colors ${
                     empty
                       ? "border-destructive bg-destructive/15"
                       : low
@@ -2391,37 +2408,27 @@ export default function LoneWolfArena() {
                   }`}
                 >
                   <span
-                    className={`text-3xl font-bold tabular-nums ${
+                    className={`text-xl font-bold tabular-nums ${
                       empty ? "text-destructive animate-pulse" : low ? "text-[var(--hud-accent)]" : "text-foreground"
                     }`}
                   >
                     {mag}
                   </span>
-                  <span className="text-sm font-medium text-muted-foreground">/ {reserve}</span>
+                  <span className="text-xs font-medium text-muted-foreground">/ {reserve}</span>
                 </div>
                 {empty && !isReloading && (
-                  <div className="animate-pulse rounded-md bg-destructive px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-destructive-foreground">
-                    Press R to reload
+                  <div className="animate-pulse rounded-md bg-destructive px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-destructive-foreground">
+                    Reload
                   </div>
                 )}
                 {isReloading && (
-                  <div className="rounded-md bg-[var(--hud-accent)]/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--hud-accent-foreground)]">
+                  <div className="rounded-md bg-[var(--hud-accent)]/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[var(--hud-accent-foreground)]">
                     Reloading… {reloadLeft.toFixed(1)}s
                   </div>
                 )}
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                  {w?.name ?? "Deagle"} · R to reload
+                <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                  {w?.name ?? "Deagle"}
                 </p>
-                {w ? (
-                  <img
-                    src={w.image}
-                    alt={w.name}
-                    width={512}
-                    height={512}
-                    className={`mt-1 h-20 w-auto object-contain opacity-90 transition-transform duration-100 sm:h-28 ${isReloading ? "translate-x-2 -translate-y-2 -rotate-6" : ""}`}
-                    loading="lazy"
-                  />
-                ) : null}
               </div>
             );
           })()}
@@ -2482,7 +2489,7 @@ export default function LoneWolfArena() {
 
       {/* killfeed */}
       {killFeed.length > 0 && (
-        <div className="pointer-events-none absolute right-4 top-[168px] flex max-w-xs flex-col gap-1 sm:right-6 sm:top-[180px]">
+        <div className="pointer-events-none absolute right-4 top-[152px] flex max-w-xs flex-col gap-1 sm:right-5 sm:top-[158px]">
           {killFeed.map((item) => (
             <div
               key={item.id}
@@ -2502,7 +2509,7 @@ export default function LoneWolfArena() {
       )}
 
       {(leaderboard || orbitLeaderboard) && (
-        <div className="pointer-events-none absolute left-4 top-[184px] max-w-xs rounded-lg border border-border/60 bg-card/80 p-4 backdrop-blur sm:left-6 sm:top-[196px]">
+        <div className="pointer-events-none absolute left-3 top-[130px] max-w-xs rounded-lg border border-border/60 bg-card/80 p-3 backdrop-blur sm:left-4 sm:top-[136px]">
           <p className="text-[10px] uppercase tracking-[0.35em] text-muted-foreground">Leaderboard</p>
           <div className="mt-2 space-y-1 text-xs">
             {Object.entries((leaderboard ?? orbitLeaderboard)!.totals).map(([team, t]) => (
@@ -2521,29 +2528,48 @@ export default function LoneWolfArena() {
 
       {/* scoreboard */}
       {hud.length > 0 && (
-        <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 sm:top-6">
-          <div className="flex items-stretch overflow-hidden rounded-lg shadow-[0_0_18px_-6px_rgba(0,0,0,0.9)]">
-            <div className="flex min-w-14 items-center justify-center bg-[#1b62d6] px-4 py-1.5 text-xl font-extrabold tabular-nums text-white">
+        <div className="pointer-events-none absolute left-1/2 top-2 z-10 -translate-x-1/2 sm:top-3">
+          <div className="flex items-stretch overflow-hidden rounded-[3px] shadow-[0_0_18px_-6px_rgba(0,0,0,0.95)]">
+            <div
+              className="flex min-w-12 items-center justify-center bg-gradient-to-b from-[#2f7dfd] to-[#1147a8] px-3 py-0.5 text-base font-extrabold tabular-nums text-white"
+              style={{ clipPath: "polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%)" }}
+            >
               {score.blue}
             </div>
-            <div className="flex flex-col items-center justify-center bg-black/70 px-4 py-1 text-center backdrop-blur">
-              <span className="text-[9px] uppercase tracking-[0.3em] text-white/70">Round {match.round}</span>
-              <span className="text-[9px] uppercase tracking-widest text-white/50">
-                {hud.filter((f) => f.team === "blue" && f.alive).length} v {hud.filter((f) => f.team === "red" && f.alive).length}
+            <div className="flex flex-col items-center justify-center bg-black/80 px-4 py-0.5 text-center backdrop-blur">
+              <span className="text-[11px] font-bold tabular-nums leading-tight text-[#ffd45e]">
+                {String(Math.floor(match.countdown / 60)).padStart(2, "0")}:
+                {String(match.countdown % 60).padStart(2, "0")}
+              </span>
+              <span className="text-[7px] uppercase tracking-[0.25em] text-white/55">
+                R{match.round} · {hud.filter((f) => f.team === "blue" && f.alive).length}v
+                {hud.filter((f) => f.team === "red" && f.alive).length}
               </span>
             </div>
-            <div className="flex min-w-14 items-center justify-center bg-[#d62828] px-4 py-1.5 text-xl font-extrabold tabular-nums text-white">
+            <div
+              className="flex min-w-12 items-center justify-center bg-gradient-to-b from-[#ff8a3d] to-[#c93a10] px-3 py-0.5 text-base font-extrabold tabular-nums text-white"
+              style={{ clipPath: "polygon(8px 0, 100% 0, 100% 100%, 0 100%)" }}
+            >
               {score.red}
             </div>
+          </div>
+
+          {/* objective / progress ribbon under the score, as in the reference HUD */}
+          <div className="relative mx-auto mt-1.5 h-4 w-[280px] overflow-hidden rounded-[2px] border border-[#e0b64a]/60 bg-black/70 sm:w-[340px]">
+            <div
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#8c6a12] via-[#e9c34f] to-[#8c6a12] transition-all duration-300"
+              style={{ width: `${Math.min(100, (score.blue / ROUNDS_TO_WIN_MATCH) * 100)}%` }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold uppercase tracking-[0.3em] text-white/90 drop-shadow">
+              Victory
+            </span>
           </div>
         </div>
       )}
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-3 p-4 sm:p-6">
-        <div />
-
-        <div className="pointer-events-auto flex flex-col items-end gap-2">
-          <div className="flex gap-2">
+      <div className="pointer-events-none absolute left-3 top-1/2 z-20 -translate-y-1/2">
+        <div className="pointer-events-auto flex flex-col items-start gap-2">
+          <div className="flex flex-col gap-2">
             <button
               onClick={() => {
                 const next = !isSfxMuted();
