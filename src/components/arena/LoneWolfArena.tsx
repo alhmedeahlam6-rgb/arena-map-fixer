@@ -2541,7 +2541,7 @@ export default function LoneWolfArena() {
           <div className="relative mx-auto mt-1.5 h-4 w-[280px] overflow-hidden rounded-[2px] border border-[#e0b64a]/60 bg-black/70 sm:w-[340px]">
             <div
               className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#8c6a12] via-[#e9c34f] to-[#8c6a12] transition-all duration-300"
-              style={{ width: `${Math.min(100, (score.blue / Math.max(1, ROUNDS_TO_WIN)) * 100)}%` }}
+              style={{ width: `${Math.min(100, (score.blue / ROUNDS_TO_WIN_MATCH) * 100)}%` }}
             />
             <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold uppercase tracking-[0.3em] text-white/90 drop-shadow">
               Victory
