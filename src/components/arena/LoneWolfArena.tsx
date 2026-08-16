@@ -2472,7 +2472,7 @@ export default function LoneWolfArena() {
 
       {/* killfeed */}
       {killFeed.length > 0 && (
-        <div className="pointer-events-none absolute right-4 top-[168px] flex max-w-xs flex-col gap-1 sm:right-6 sm:top-[180px]">
+        <div className="pointer-events-none absolute right-4 top-[152px] flex max-w-xs flex-col gap-1 sm:right-5 sm:top-[158px]">
           {killFeed.map((item) => (
             <div
               key={item.id}
@@ -2492,7 +2492,7 @@ export default function LoneWolfArena() {
       )}
 
       {(leaderboard || orbitLeaderboard) && (
-        <div className="pointer-events-none absolute left-4 top-[184px] max-w-xs rounded-lg border border-border/60 bg-card/80 p-4 backdrop-blur sm:left-6 sm:top-[196px]">
+        <div className="pointer-events-none absolute left-3 top-[130px] max-w-xs rounded-lg border border-border/60 bg-card/80 p-3 backdrop-blur sm:left-4 sm:top-[136px]">
           <p className="text-[10px] uppercase tracking-[0.35em] text-muted-foreground">Leaderboard</p>
           <div className="mt-2 space-y-1 text-xs">
             {Object.entries((leaderboard ?? orbitLeaderboard)!.totals).map(([team, t]) => (
